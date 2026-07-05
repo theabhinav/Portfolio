@@ -99,11 +99,16 @@ export default function BackgroundCanvas() {
     };
   }, []);
 
+  // Guarantee click-through behavior via strict inline styling
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 -z-10 pointer-events-none block"
-      style={{ background: 'transparent' }}
+      className="fixed inset-0 block"
+      style={{ 
+        background: 'transparent', 
+        pointerEvents: 'none', 
+        zIndex: -999 
+      }}
     />
   );
 }

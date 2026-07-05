@@ -38,7 +38,7 @@ export function SurveyProvider({ children }) {
   });
   const [submitted, setSubmitted] = useState(false);
 
-  // Restart/Reset Survey State
+  // Reset Survey State
   const resetSurvey = () => {
     setConsentGiven(false);
     setDemographics({
@@ -107,7 +107,7 @@ export function RequireAiResponse({ children }) {
   const hasDemographics = demographics.age && demographics.gender && demographics.grade && demographics.stream && demographics.familyCareerLeaning;
   if (!consentGiven) return <Navigate to="/" replace />;
   if (!hasDemographics) return <Navigate to="/demographics" replace />;
-  if (!participantId || !aiVersion) return <Navigate to="/demographics" replace />; // will fetch during demog submit
+  if (!participantId || !aiVersion) return <Navigate to="/demographics" replace />;
   return children;
 }
 
@@ -136,7 +136,7 @@ export function ConsentStep() {
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -15 }}
-      className="max-w-2xl mx-auto glass-panel-glow glass-panel rounded-2xl p-8 md:p-10"
+      className="max-w-2xl mx-auto glass-panel-glow glass-panel rounded-2xl p-8 md:p-10 relative z-20"
     >
       <div className="flex justify-center mb-6">
         <div className="p-4 bg-indigo-500/10 rounded-full border border-indigo-500/20 text-[#7c6fff]">
@@ -209,11 +209,13 @@ export function DemographicsStep() {
   const navigate = useNavigate();
 
   const handleTileSelect = (field, value) => {
+    console.log(`Setting demographic tile [${field}] =`, value);
     setDemographics(prev => ({ ...prev, [field]: value }));
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(`Input change [${name}] =`, value);
     setDemographics(prev => ({ ...prev, [name]: value }));
   };
 
@@ -251,7 +253,7 @@ export function DemographicsStep() {
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -15 }}
-      className="max-w-2xl mx-auto glass-panel rounded-2xl p-8 md:p-10"
+      className="w-full max-w-2xl mx-auto glass-panel rounded-2xl p-8 md:p-10 relative z-20"
     >
       <div className="flex justify-center mb-6">
         <div className="p-4 bg-indigo-500/10 rounded-full border border-indigo-500/20 text-[#7c6fff]">
@@ -282,7 +284,7 @@ export function DemographicsStep() {
             name="age" 
             min="10" 
             max="100"
-            value={demographics.age}
+            value={demographics.age || ''}
             onChange={handleInputChange}
             placeholder="Enter age (e.g. 17)"
             className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-[#7c6fff] focus:ring-1 focus:ring-[#7c6fff] transition-all"
@@ -298,7 +300,7 @@ export function DemographicsStep() {
                 key={g}
                 type="button"
                 onClick={() => handleTileSelect('gender', g)}
-                className={`py-3 rounded-xl border text-xs font-semibold tracking-wide transition-all ${
+                className={`py-3 rounded-xl border text-xs font-semibold tracking-wide cursor-pointer transition-all ${
                   demographics.gender === g 
                     ? 'bg-gradient-to-r from-[#7c6fff]/20 to-[#4fd1ff]/20 border-[#7c6fff] text-white shadow-[0_0_15px_rgba(124,111,255,0.15)]' 
                     : 'bg-white/5 border-white/5 text-gray-400 hover:bg-white/10 hover:border-white/10'
@@ -316,7 +318,7 @@ export function DemographicsStep() {
           <input 
             type="text" 
             name="grade" 
-            value={demographics.grade}
+            value={demographics.grade || ''}
             onChange={handleInputChange}
             placeholder="e.g. Class 11th"
             className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-[#7c6fff] focus:ring-1 focus:ring-[#7c6fff] transition-all"
@@ -329,7 +331,7 @@ export function DemographicsStep() {
           <input 
             type="text" 
             name="stream" 
-            value={demographics.stream}
+            value={demographics.stream || ''}
             onChange={handleInputChange}
             placeholder="e.g. Science (PCM/B), Commerce, Humanities"
             className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-[#7c6fff] focus:ring-1 focus:ring-[#7c6fff] transition-all"
@@ -351,7 +353,7 @@ export function DemographicsStep() {
                 key={opt.key}
                 type="button"
                 onClick={() => handleTileSelect('familyCareerLeaning', opt.key)}
-                className={`px-4 py-3 rounded-xl border text-left text-xs font-semibold tracking-wide transition-all ${
+                className={`px-4 py-3 rounded-xl border text-left text-xs font-semibold tracking-wide cursor-pointer transition-all ${
                   demographics.familyCareerLeaning === opt.key 
                     ? 'bg-gradient-to-r from-[#7c6fff]/20 to-[#4fd1ff]/20 border-[#7c6fff] text-white shadow-[0_0_15px_rgba(124,111,255,0.15)]' 
                     : 'bg-white/5 border-white/5 text-gray-400 hover:bg-white/10 hover:border-white/10'
@@ -367,14 +369,14 @@ export function DemographicsStep() {
       <div className="flex justify-between mt-10">
         <button
           onClick={() => navigate('/')}
-          className="px-6 py-3 rounded-xl font-heading text-sm font-semibold border border-white/10 text-gray-300 hover:bg-white/5 transition-all"
+          className="px-6 py-3 rounded-xl font-heading text-sm font-semibold border border-white/10 text-gray-300 hover:bg-white/5 transition-all cursor-pointer"
         >
           Back
         </button>
         <button
           onClick={handleNext}
           disabled={!isFormValid || loading}
-          className="btn flex items-center gap-2 px-6 py-3 rounded-xl font-heading text-sm font-semibold transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed bg-gradient-to-r from-[#7c6fff] to-[#4fd1ff] text-black shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0"
+          className="btn flex items-center gap-2 px-6 py-3 rounded-xl font-heading text-sm font-semibold transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed bg-gradient-to-r from-[#7c6fff] to-[#4fd1ff] text-black shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
         >
           {loading ? 'Initializing...' : 'Continue'} <ArrowRight size={16} />
         </button>
@@ -400,7 +402,7 @@ export function AiResponseStep() {
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -15 }}
-      className="max-w-2xl mx-auto glass-panel rounded-2xl p-8 md:p-10"
+      className="max-w-2xl mx-auto glass-panel rounded-2xl p-8 md:p-10 relative z-20"
     >
       <div className="flex justify-center mb-6">
         <div className="p-4 bg-indigo-500/10 rounded-full border border-indigo-500/20 text-[#7c6fff]">
@@ -437,13 +439,13 @@ export function AiResponseStep() {
       <div className="flex justify-between mt-10">
         <button
           onClick={() => navigate('/demographics')}
-          className="px-6 py-3 rounded-xl font-heading text-sm font-semibold border border-white/10 text-gray-300 hover:bg-white/5 transition-all"
+          className="px-6 py-3 rounded-xl font-heading text-sm font-semibold border border-white/10 text-gray-300 hover:bg-white/5 transition-all cursor-pointer"
         >
           Back
         </button>
         <button
           onClick={() => navigate('/questionnaire')}
-          className="btn flex items-center gap-2 px-6 py-3 rounded-xl font-heading text-sm font-semibold transition-all duration-300 bg-gradient-to-r from-[#7c6fff] to-[#4fd1ff] text-black shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0"
+          className="btn flex items-center gap-2 px-6 py-3 rounded-xl font-heading text-sm font-semibold transition-all duration-300 bg-gradient-to-r from-[#7c6fff] to-[#4fd1ff] text-black shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
         >
           Proceed to Questionnaire <ArrowRight size={16} />
         </button>
@@ -487,6 +489,7 @@ export function QuestionnaireStep() {
   const isFormComplete = isMcqValid && isOpenEndedValid;
 
   const handleMcqSelect = (field, value) => {
+    console.log(`Setting MCQ [${field}] =`, value);
     setMcq(prev => ({ ...prev, [field]: value }));
   };
 
@@ -536,7 +539,7 @@ export function QuestionnaireStep() {
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -15 }}
-      className="max-w-3xl mx-auto glass-panel rounded-2xl p-8 md:p-10 mb-10"
+      className="w-full max-w-3xl mx-auto glass-panel rounded-2xl p-8 md:p-10 mb-10 relative z-20"
     >
       <div className="flex justify-center mb-6">
         <div className="p-4 bg-indigo-500/10 rounded-full border border-indigo-500/20 text-[#7c6fff]">
@@ -579,7 +582,7 @@ export function QuestionnaireStep() {
                 key={opt.key}
                 type="button"
                 onClick={() => handleMcqSelect('careerChoice', opt.key)}
-                className={`py-3 rounded-xl border font-semibold tracking-wide transition-all ${
+                className={`py-3 rounded-xl border font-semibold tracking-wide cursor-pointer transition-all ${
                   mcq.careerChoice === opt.key 
                     ? 'bg-gradient-to-r from-[#7c6fff]/20 to-[#4fd1ff]/20 border-[#7c6fff] text-white shadow-[0_0_15px_rgba(124,111,255,0.15)]' 
                     : 'bg-white/5 border-white/5 text-gray-400 hover:bg-white/10'
@@ -602,7 +605,7 @@ export function QuestionnaireStep() {
                 key={val}
                 type="button"
                 onClick={() => handleMcqSelect('confidence', val)}
-                className={`flex-1 py-3 rounded-xl border font-bold text-center transition-all ${
+                className={`flex-1 py-3 rounded-xl border font-bold text-center cursor-pointer transition-all ${
                   mcq.confidence === val 
                     ? 'bg-gradient-to-r from-[#7c6fff] to-[#4fd1ff] border-transparent text-black shadow-[0_0_15px_rgba(124,111,255,0.3)]' 
                     : 'bg-white/5 border-white/5 text-gray-400 hover:bg-white/10'
@@ -629,7 +632,7 @@ export function QuestionnaireStep() {
                 key={opt}
                 type="button"
                 onClick={() => handleMcqSelect('wouldVerify', opt)}
-                className={`py-3 rounded-xl border font-semibold tracking-wide transition-all ${
+                className={`py-3 rounded-xl border font-semibold tracking-wide cursor-pointer transition-all ${
                   mcq.wouldVerify === opt 
                     ? 'bg-gradient-to-r from-[#7c6fff]/20 to-[#4fd1ff]/20 border-[#7c6fff] text-white shadow-[0_0_15px_rgba(124,111,255,0.15)]' 
                     : 'bg-white/5 border-white/5 text-gray-400 hover:bg-white/10'
@@ -652,7 +655,7 @@ export function QuestionnaireStep() {
                 key={val}
                 type="button"
                 onClick={() => handleMcqSelect('aiInfluence', val)}
-                className={`flex-1 py-3 rounded-xl border font-bold text-center transition-all ${
+                className={`flex-1 py-3 rounded-xl border font-bold text-center cursor-pointer transition-all ${
                   mcq.aiInfluence === val 
                     ? 'bg-gradient-to-r from-[#7c6fff] to-[#4fd1ff] border-transparent text-black shadow-[0_0_15px_rgba(124,111,255,0.3)]' 
                     : 'bg-white/5 border-white/5 text-gray-400 hover:bg-white/10'
@@ -679,7 +682,7 @@ export function QuestionnaireStep() {
                 key={opt}
                 type="button"
                 onClick={() => handleMcqSelect('helpedThinkCarefully', opt)}
-                className={`py-3 rounded-xl border font-semibold tracking-wide transition-all ${
+                className={`py-3 rounded-xl border font-semibold tracking-wide cursor-pointer transition-all ${
                   mcq.helpedThinkCarefully === opt 
                     ? 'bg-gradient-to-r from-[#7c6fff]/20 to-[#4fd1ff]/20 border-[#7c6fff] text-white shadow-[0_0_15px_rgba(124,111,255,0.15)]' 
                     : 'bg-white/5 border-white/5 text-gray-400 hover:bg-white/10'
@@ -708,7 +711,7 @@ export function QuestionnaireStep() {
           <textarea
             name="whyChoice"
             rows="3"
-            value={openEnded.whyChoice}
+            value={openEnded.whyChoice || ''}
             onChange={handleOpenEndedChange}
             placeholder="Describe the logic and constraints that pushed you towards Computer Science or Medicine..."
             className="w-full p-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-600 focus:outline-none focus:border-[#7c6fff] focus:ring-1 focus:ring-[#7c6fff] transition-all font-body text-sm"
@@ -730,7 +733,7 @@ export function QuestionnaireStep() {
           <textarea
             name="influentialPart"
             rows="3"
-            value={openEnded.influentialPart}
+            value={openEnded.influentialPart || ''}
             onChange={handleOpenEndedChange}
             placeholder="Refer to specific arguments, options, timelines, or questions raised by the AI..."
             className="w-full p-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-600 focus:outline-none focus:border-[#7c6fff] focus:ring-1 focus:ring-[#7c6fff] transition-all font-body text-sm"
@@ -752,7 +755,7 @@ export function QuestionnaireStep() {
           <textarea
             name="unhelpfulOrMisleading"
             rows="3"
-            value={openEnded.unhelpfulOrMisleading}
+            value={openEnded.unhelpfulOrMisleading || ''}
             onChange={handleOpenEndedChange}
             placeholder="Explain if any argument was biased, oversimplified, or omitted important facts..."
             className="w-full p-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-600 focus:outline-none focus:border-[#7c6fff] focus:ring-1 focus:ring-[#7c6fff] transition-all font-body text-sm"
@@ -774,7 +777,7 @@ export function QuestionnaireStep() {
           <textarea
             name="improvementSuggestion"
             rows="3"
-            value={openEnded.improvementSuggestion}
+            value={openEnded.improvementSuggestion || ''}
             onChange={handleOpenEndedChange}
             placeholder="Describe what additional info, layout layout improvements, or perspectives the AI should have included..."
             className="w-full p-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-600 focus:outline-none focus:border-[#7c6fff] focus:ring-1 focus:ring-[#7c6fff] transition-all font-body text-sm"
@@ -791,17 +794,24 @@ export function QuestionnaireStep() {
         </div>
       </div>
 
+      {error && (
+        <div className="mt-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm flex items-center gap-3">
+          <AlertCircle size={18} />
+          <span>{error}</span>
+        </div>
+      )}
+
       <div className="flex justify-between mt-10">
         <button
           onClick={() => navigate('/ai-response')}
-          className="px-6 py-3 rounded-xl font-heading text-sm font-semibold border border-white/10 text-gray-300 hover:bg-white/5 transition-all"
+          className="px-6 py-3 rounded-xl font-heading text-sm font-semibold border border-white/10 text-gray-300 hover:bg-white/5 transition-all cursor-pointer"
         >
           Back
         </button>
         <button
           onClick={handleSubmitSurvey}
           disabled={!isFormComplete || loading}
-          className="btn flex items-center gap-2 px-6 py-3 rounded-xl font-heading text-sm font-semibold transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed bg-gradient-to-r from-[#7c6fff] to-[#4fd1ff] text-black shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0"
+          className="btn flex items-center gap-2 px-6 py-3 rounded-xl font-heading text-sm font-semibold transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed bg-gradient-to-r from-[#7c6fff] to-[#4fd1ff] text-black shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
         >
           {loading ? 'Submitting Responses...' : 'Submit Survey'} <CheckCircle size={16} />
         </button>
@@ -826,7 +836,7 @@ export function ThanksStep() {
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0 }}
-      className="max-w-md mx-auto glass-panel-glow glass-panel rounded-2xl p-10 text-center"
+      className="max-w-md mx-auto glass-panel-glow glass-panel rounded-2xl p-10 text-center relative z-20"
     >
       <div className="flex justify-center mb-6">
         <div className="p-4 bg-emerald-500/10 rounded-full border border-emerald-500/20 text-[#10b981]">
@@ -847,7 +857,7 @@ export function ThanksStep() {
 
       <button
         onClick={handleRestart}
-        className="btn px-6 py-3 rounded-xl font-heading text-sm font-semibold transition-all duration-300 bg-gradient-to-r from-[#7c6fff] to-[#4fd1ff] text-black shadow-lg shadow-indigo-500/20 hover:shadow-[#7c6fff]/30 hover:-translate-y-0.5 active:translate-y-0"
+        className="btn px-6 py-3 rounded-xl font-heading text-sm font-semibold transition-all duration-300 bg-gradient-to-r from-[#7c6fff] to-[#4fd1ff] text-black shadow-lg shadow-indigo-500/20 hover:shadow-[#7c6fff]/30 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
       >
         Submit Another Response
       </button>
