@@ -45,7 +45,7 @@ function App() {
       {!loading && (
         <Router>
           {/* Subtle neural canvas background */}
-          {/* <BackgroundCanvas /> */}
+          <BackgroundCanvas />
           
           <SurveyProvider>
             <div className="min-h-screen relative flex items-center justify-center p-4">

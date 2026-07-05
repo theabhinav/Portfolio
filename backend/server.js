@@ -276,6 +276,19 @@ app.get('/api/admin/stats', authenticateAdmin, async (req, res) => {
   }
 });
 
+// @route   DELETE /api/admin/responses/clear
+// @desc    Clear all participant responses (JWT protected)
+// @access  Private (Admin)
+app.delete('/api/admin/responses/clear', authenticateAdmin, async (req, res) => {
+  try {
+    await Response.deleteMany({});
+    res.json({ success: true, message: 'All survey responses cleared successfully.' });
+  } catch (error) {
+    console.error('Error clearing responses:', error);
+    res.status(500).json({ error: 'Server error clearing responses.' });
+  }
+});
+
 // Helper: Escape commas and quotes for standard CSV export
 const escapeCSV = (val) => {
   if (val === undefined || val === null) return '';

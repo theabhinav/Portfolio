@@ -68,6 +68,25 @@ export default function AdminDashboard() {
     localStorage.removeItem('admin_token');
     setToken('');
     navigate('/admin/login');
+  };  const handleClearDatabase = async () => {
+    const confirm1 = window.confirm("WARNING: This will permanently delete all participant survey responses from the database. This action cannot be undone.\n\nAre you sure you want to proceed?");
+    if (!confirm1) return;
+    
+    const confirm2 = window.confirm("DOUBLE CONFIRMATION:\nAre you absolutely sure you want to WIPE the database clean? Click OK to delete all responses.");
+    if (!confirm2) return;
+    
+    try {
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
+      const response = await axios.delete(`${API_BASE_URL}/admin/responses/clear`, config);
+      if (response.data.success) {
+        alert("Database cleared successfully!");
+        fetchDashboardData();
+      }
+    } catch (err) {
+      alert("Error clearing database: " + (err.response?.data?.error || err.message));
+    }
   };
 
   const triggerDownload = async (endpoint, filename) => {
@@ -173,13 +192,19 @@ export default function AdminDashboard() {
         <div className="flex items-center gap-2">
           <button 
             onClick={() => fetchDashboardData()}
-            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-white/10 text-xs font-semibold text-gray-300 hover:bg-white/5 transition-all"
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-white/10 text-xs font-semibold text-gray-300 hover:bg-white/5 transition-all cursor-pointer"
           >
             <RefreshCw size={14} className={loading ? 'animate-spin' : ''} /> Refresh
           </button>
           <button 
+            onClick={handleClearDatabase}
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-red-600/15 border border-red-500/20 text-xs font-semibold text-red-400 hover:bg-red-600 hover:text-white transition-all cursor-pointer"
+          >
+            <Database size={14} /> Clear Database
+          </button>
+          <button 
             onClick={handleLogout}
-            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-red-500/15 border border-red-500/20 text-xs font-semibold text-red-400 hover:bg-red-500/25 transition-all"
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-red-500/15 border border-red-500/20 text-xs font-semibold text-red-400 hover:bg-red-500/25 transition-all cursor-pointer"
           >
             <LogOut size={14} /> Logout
           </button>
