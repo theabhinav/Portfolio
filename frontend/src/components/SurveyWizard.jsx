@@ -13,33 +13,94 @@ const API_BASE_URL = 'http://localhost:5000/api';
 const SurveyContext = createContext(null);
 
 export function SurveyProvider({ children }) {
-  const [consentGiven, setConsentGiven] = useState(false);
-  const [demographics, setDemographics] = useState({
-    age: '',
-    gender: '',
-    grade: '',
-    stream: '',
-    familyCareerLeaning: ''
+  // Load initial state from sessionStorage if present
+  const [consentGiven, setConsentGiven] = useState(() => {
+    return sessionStorage.getItem('survey_consent') === 'true';
   });
-  const [participantId, setParticipantId] = useState('');
-  const [aiVersion, setAiVersion] = useState('');
-  const [mcq, setMcq] = useState({
-    careerChoice: '',
-    confidence: 0,
-    wouldVerify: '',
-    aiInfluence: 0,
-    helpedThinkCarefully: ''
+  
+  const [demographics, setDemographics] = useState(() => {
+    const saved = sessionStorage.getItem('survey_demographics');
+    return saved ? JSON.parse(saved) : {
+      age: '',
+      gender: '',
+      grade: '',
+      stream: '',
+      familyCareerLeaning: ''
+    };
   });
-  const [openEnded, setOpenEnded] = useState({
-    whyChoice: '',
-    influentialPart: '',
-    unhelpfulOrMisleading: '',
-    improvementSuggestion: ''
+
+  const [participantId, setParticipantId] = useState(() => {
+    return sessionStorage.getItem('survey_participant_id') || '';
   });
-  const [submitted, setSubmitted] = useState(false);
+
+  const [aiVersion, setAiVersion] = useState(() => {
+    return sessionStorage.getItem('survey_ai_version') || '';
+  });
+
+  const [mcq, setMcq] = useState(() => {
+    const saved = sessionStorage.getItem('survey_mcq');
+    return saved ? JSON.parse(saved) : {
+      careerChoice: '',
+      confidence: 0,
+      wouldVerify: '',
+      aiInfluence: 0,
+      helpedThinkCarefully: ''
+    };
+  });
+
+  const [openEnded, setOpenEnded] = useState(() => {
+    const saved = sessionStorage.getItem('survey_open_ended');
+    return saved ? JSON.parse(saved) : {
+      whyChoice: '',
+      influentialPart: '',
+      unhelpfulOrMisleading: '',
+      improvementSuggestion: ''
+    };
+  });
+
+  const [submitted, setSubmitted] = useState(() => {
+    return sessionStorage.getItem('survey_submitted') === 'true';
+  });
+
+  // Sync state to sessionStorage whenever it changes
+  useEffect(() => {
+    sessionStorage.setItem('survey_consent', consentGiven);
+  }, [consentGiven]);
+
+  useEffect(() => {
+    sessionStorage.setItem('survey_demographics', JSON.stringify(demographics));
+  }, [demographics]);
+
+  useEffect(() => {
+    sessionStorage.setItem('survey_participant_id', participantId);
+  }, [participantId]);
+
+  useEffect(() => {
+    sessionStorage.setItem('survey_ai_version', aiVersion);
+  }, [aiVersion]);
+
+  useEffect(() => {
+    sessionStorage.setItem('survey_mcq', JSON.stringify(mcq));
+  }, [mcq]);
+
+  useEffect(() => {
+    sessionStorage.setItem('survey_open_ended', JSON.stringify(openEnded));
+  }, [openEnded]);
+
+  useEffect(() => {
+    sessionStorage.setItem('survey_submitted', submitted);
+  }, [submitted]);
 
   // Reset Survey State
   const resetSurvey = () => {
+    sessionStorage.removeItem('survey_consent');
+    sessionStorage.removeItem('survey_demographics');
+    sessionStorage.removeItem('survey_participant_id');
+    sessionStorage.removeItem('survey_ai_version');
+    sessionStorage.removeItem('survey_mcq');
+    sessionStorage.removeItem('survey_open_ended');
+    sessionStorage.removeItem('survey_submitted');
+
     setConsentGiven(false);
     setDemographics({
       age: '',
