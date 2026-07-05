@@ -232,8 +232,8 @@ export function DemographicsStep() {
     setError('');
 
     try {
-      // Start participant session - fetch randomized AI Version & unique ID
-      const response = await axios.get(`${API_BASE_URL}/participant/start`);
+      // Start participant session - fetch randomized AI Version & unique ID with 4s timeout
+      const response = await axios.get(`${API_BASE_URL}/participant/start`, { timeout: 4000 });
       const { participantId, aiVersion } = response.data;
       
       setParticipantId(participantId);
@@ -519,7 +519,8 @@ export function QuestionnaireStep() {
         openEnded
       };
 
-      const response = await axios.post(`${API_BASE_URL}/participant/submit`, payload);
+      // Submit responses with 8s timeout
+      const response = await axios.post(`${API_BASE_URL}/participant/submit`, payload, { timeout: 8000 });
       if (response.data.success) {
         setSubmitted(true);
         navigate('/thanks');
