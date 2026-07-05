@@ -40,11 +40,11 @@ const authenticateAdmin = (req, res, next) => {
   }
 };
 
-// Helper: Loose server-side word count check (e.g. min 40 words)
+// Helper: Loose server-side word count check (optional, max 160 words)
 const isWordCountAcceptable = (text) => {
-  if (!text) return false;
+  if (!text || text.trim() === '') return true; // Optional: empty text is valid
   const wordCount = text.trim().split(/\s+/).filter(Boolean).length;
-  return wordCount >= 40 && wordCount <= 160; // Allow slight margin for different browser split behaviors
+  return wordCount <= 160; // Allow max 160 words
 };
 
 // @route   GET /api/participant/start
@@ -114,7 +114,7 @@ app.post('/api/participant/submit', async (req, res) => {
     for (const field of openEndedFields) {
       if (!isWordCountAcceptable(openEnded[field])) {
         return res.status(400).json({
-          error: `Open-ended responses must be between 50 and 150 words. Check field: ${field}`
+          error: `Open-ended responses must not exceed 150 words. Check field: ${field}`
         });
       }
     }

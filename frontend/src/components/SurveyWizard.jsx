@@ -719,10 +719,12 @@ export function QuestionnaireStep() {
             className="w-full p-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-600 focus:outline-none focus:border-[#7c6fff] focus:ring-1 focus:ring-[#7c6fff] transition-all font-body text-sm"
           />
           <div className="flex justify-end mt-1">
-            <span className={`text-xs font-mono px-2 py-0.5 rounded ${
-              isWordCountValid(openEnded.whyChoice) 
-                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
-                : 'bg-red-500/10 text-red-400 border border-red-500/20'
+            <span className={`text-xs font-mono px-2 py-0.5 rounded border ${
+              !openEnded.whyChoice || openEnded.whyChoice.trim() === ''
+                ? 'bg-white/5 text-gray-400 border-white/5'
+                : isWordCountValid(openEnded.whyChoice)
+                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                  : 'bg-red-500/10 text-red-400 border-red-500/20'
             }`}>
               {getWordCount(openEnded.whyChoice)} / 150 words
             </span>
@@ -741,10 +743,12 @@ export function QuestionnaireStep() {
             className="w-full p-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-600 focus:outline-none focus:border-[#7c6fff] focus:ring-1 focus:ring-[#7c6fff] transition-all font-body text-sm"
           />
           <div className="flex justify-end mt-1">
-            <span className={`text-xs font-mono px-2 py-0.5 rounded ${
-              isWordCountValid(openEnded.influentialPart) 
-                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
-                : 'bg-red-500/10 text-red-400 border border-red-500/20'
+            <span className={`text-xs font-mono px-2 py-0.5 rounded border ${
+              !openEnded.influentialPart || openEnded.influentialPart.trim() === ''
+                ? 'bg-white/5 text-gray-400 border-white/5'
+                : isWordCountValid(openEnded.influentialPart)
+                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                  : 'bg-red-500/10 text-red-400 border-red-500/20'
             }`}>
               {getWordCount(openEnded.influentialPart)} / 150 words
             </span>
@@ -763,10 +767,12 @@ export function QuestionnaireStep() {
             className="w-full p-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-600 focus:outline-none focus:border-[#7c6fff] focus:ring-1 focus:ring-[#7c6fff] transition-all font-body text-sm"
           />
           <div className="flex justify-end mt-1">
-            <span className={`text-xs font-mono px-2 py-0.5 rounded ${
-              isWordCountValid(openEnded.unhelpfulOrMisleading) 
-                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
-                : 'bg-red-500/10 text-red-400 border border-red-500/20'
+            <span className={`text-xs font-mono px-2 py-0.5 rounded border ${
+              !openEnded.unhelpfulOrMisleading || openEnded.unhelpfulOrMisleading.trim() === ''
+                ? 'bg-white/5 text-gray-400 border-white/5'
+                : isWordCountValid(openEnded.unhelpfulOrMisleading)
+                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                  : 'bg-red-500/10 text-red-400 border-red-500/20'
             }`}>
               {getWordCount(openEnded.unhelpfulOrMisleading)} / 150 words
             </span>
@@ -785,10 +791,12 @@ export function QuestionnaireStep() {
             className="w-full p-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-600 focus:outline-none focus:border-[#7c6fff] focus:ring-1 focus:ring-[#7c6fff] transition-all font-body text-sm"
           />
           <div className="flex justify-end mt-1">
-            <span className={`text-xs font-mono px-2 py-0.5 rounded ${
-              isWordCountValid(openEnded.improvementSuggestion) 
-                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
-                : 'bg-red-500/10 text-red-400 border border-red-500/20'
+            <span className={`text-xs font-mono px-2 py-0.5 rounded border ${
+              !openEnded.improvementSuggestion || openEnded.improvementSuggestion.trim() === ''
+                ? 'bg-white/5 text-gray-400 border-white/5'
+                : isWordCountValid(openEnded.improvementSuggestion)
+                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                  : 'bg-red-500/10 text-red-400 border-red-500/20'
             }`}>
               {getWordCount(openEnded.improvementSuggestion)} / 150 words
             </span>
