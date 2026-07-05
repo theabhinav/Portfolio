@@ -39,10 +39,10 @@ const responseSchema = new mongoose.Schema({
     helpedThinkCarefully: { type: String, enum: ['Yes', 'No'], required: true }
   },
   openEnded: {
-    whyChoice: { type: String, required: true },
-    influentialPart: { type: String, required: true },
-    unhelpfulOrMisleading: { type: String, required: true },
-    improvementSuggestion: { type: String, required: true }
+    whyChoice: { type: String, required: false },
+    influentialPart: { type: String, required: false },
+    unhelpfulOrMisleading: { type: String, required: false },
+    improvementSuggestion: { type: String, required: false }
   },
   submittedAt: {
     type: Date,
