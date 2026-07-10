@@ -9,7 +9,7 @@
     <meta name="author" content="Abhinav Tiwari" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Charm&family=Courgette&family=Noto+Nastaliq+Urdu:wght@600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="three.css" />
     <title>Abhinav Tiwari | Full Stack Developer</title>
@@ -18,11 +18,13 @@
 <body>
   <div class="trapy_idx"></div>
   <nav class="abt_nav">
+    <a href="index.html" class="nav-logo">Abhinav Tiwari</a>
     <div class="navbs">
       <button onclick="location.href='index.html'">Home</button>
       <button onclick="location.href='projects.html'">Projects</button>
       <button onclick="location.href='skills.html'">Skills</button>
       <button onclick="location.href='about.html'">About</button>
+      <a href="resume.pdf" download="Abhinav_Tiwari_Resume.pdf" class="resume-btn">Resume</a>
     </div>
   </nav>
   <div class="trapy3"></div>
@@ -33,6 +35,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
   <script src="particletextmix.js"></script>
   <script src="vanta_rings.js"></script>
-  <script>window.addEventListener('scroll', () => document.body.classList.toggle('scrolled', window.scrollY > 50));</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="transitions.js"></script>
 </body>
 </html>
