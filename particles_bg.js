@@ -15,8 +15,8 @@
   let height = canvas.height = window.innerHeight;
 
   const particles = [];
-  // Balanced count for constellation rendering performance
-  const particleCount = Math.min(110, Math.floor((width * height) / 12000));
+  // Richer ambient background particle count (optimized for visual complexity)
+  const particleCount = Math.min(220, Math.floor((width * height) / 6000));
   
   const mouse = { x: -1000, y: -1000, radius: 130 };
 
@@ -107,14 +107,14 @@
         const dy = particles[i].y - particles[j].y;
         const dist = Math.sqrt(dx * dx + dy * dy);
         
-        // Link particles within range with a subtle constellation line
-        if (dist < 110) {
+        // Link particles within range with a subtle constellation line (optimized for density)
+        if (dist < 95) {
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);
-          const alpha = ((110 - dist) / 110) * 0.12; // Translucent lines
+          const alpha = ((95 - dist) / 95) * 0.09; // Softer, cleaner connection lines
           ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
-          ctx.lineWidth = 0.5;
+          ctx.lineWidth = 0.55;
           ctx.stroke();
         }
       }
