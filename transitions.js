@@ -97,6 +97,23 @@
       btn.addEventListener('click', function (e) {
         const target = btn.dataset.href || getNavHref(btn);
         if (!target) return;
+
+        // Support for hash links / smooth scrolling
+        if (target.startsWith('#') || target.includes('#')) {
+          const parts = target.split('#');
+          const targetPage = parts[0];
+          const hash = parts[1];
+
+          if (targetPage === '' || targetPage === currentPage()) {
+            e.preventDefault();
+            const el = document.getElementById(hash);
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth' });
+            }
+            return;
+          }
+        }
+
         e.preventDefault();
         navigateWithTransition(target);
       });
@@ -179,6 +196,18 @@
     }
 
     await playEnterTransition();
+
+    // Check for hash on load and scroll to it
+    if (window.location.hash) {
+      const id = window.location.hash.substring(1);
+      const el = document.getElementById(id);
+      if (el) {
+        setTimeout(function () {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+      }
+    }
+
     window.dispatchEvent(new CustomEvent('pageTransitionComplete'));
   }
 
