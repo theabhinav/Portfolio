@@ -158,6 +158,32 @@ console.log(developer.solveProblems());</code></pre>
           </a>
         </div>
       </div>
+
+      <!-- Contact Form Bento Widget -->
+      <div class="bento-item span-4 bento-contact-form">
+        <h3 class="bento-title"><span>04.</span> Send a Message</h3>
+        <form id="contact-form" class="premium-form">
+          <input type="hidden" name="access_key" value="b9b55f83-c5a0-4bbc-ac9c-6d6c17e87f4e">
+          
+          <div class="form-group">
+            <input type="text" name="name" required placeholder="Your Name" class="form-input">
+          </div>
+          <div class="form-group">
+            <input type="email" name="email" required placeholder="Your Email" class="form-input">
+          </div>
+          <div class="form-group">
+            <textarea name="message" required placeholder="Your Message" class="form-input textarea" rows="4"></textarea>
+          </div>
+          
+          <button type="submit" class="form-submit-btn">
+            <span>Send Message</span>
+            <svg class="submit-icon" viewBox="0 0 24 24" width="16" height="16">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </form>
+        <div id="form-status" class="form-status"></div>
+      </div>
     </div>
   </main>
 

@@ -123,6 +123,59 @@
         }
       });
     }
+
+    // Contact Form submission logic
+    initContactForm();
+  }
+
+  function initContactForm() {
+    const form = document.getElementById('contact-form');
+    const status = document.getElementById('form-status');
+    if (!form || !status) return;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      
+      const formData = new FormData(form);
+      const accessKey = formData.get('access_key');
+      
+      // If access key is still the placeholder, advise the user to set it up
+      if (accessKey === 'YOUR_ACCESS_KEY_HERE') {
+        status.textContent = 'Setup Required: Please replace YOUR_ACCESS_KEY_HERE with a real Web3Forms key in about.html.';
+        status.className = 'form-status show error';
+        return;
+      }
+
+      status.textContent = 'Sending message...';
+      status.className = 'form-status show info';
+      
+      const object = Object.fromEntries(formData);
+      const json = JSON.stringify(object);
+
+      fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: json
+      })
+      .then(async (response) => {
+        let res = await response.json();
+        if (response.status == 200) {
+          status.textContent = 'Message sent successfully!';
+          status.className = 'form-status show success';
+          form.reset();
+        } else {
+          status.textContent = res.message || 'Something went wrong. Please try again.';
+          status.className = 'form-status show error';
+        }
+      })
+      .catch((error) => {
+        status.textContent = 'Network error. Please try again later.';
+        status.className = 'form-status show error';
+      });
+    });
   }
 
   window.addEventListener('pageTransitionComplete', initAnimations);
