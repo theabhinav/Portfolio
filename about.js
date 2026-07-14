@@ -18,8 +18,10 @@
     });
   }
 
-  // Mouse hover glow tracker for bento cells
+  // Mouse hover glow tracker and 3D tilt for bento cells
   function initBentoGlow() {
+    if (reducedMotion) return;
+
     document.querySelectorAll('.bento-item').forEach(function (item) {
       item.addEventListener('mousemove', function (e) {
         var rect = item.getBoundingClientRect();
@@ -27,6 +29,30 @@
         var y = e.clientY - rect.top;
         item.style.setProperty('--x', x + 'px');
         item.style.setProperty('--y', y + 'px');
+
+        if (!mobile && window.gsap) {
+          // Tilt calculations (mild tilt angle, e.g. max 5 degrees for cleaner look)
+          var dx = (x / rect.width) - 0.5;
+          var dy = (y / rect.height) - 0.5;
+          window.gsap.to(item, {
+            rotateY: dx * 6,
+            rotateX: -dy * 6,
+            transformPerspective: 1000,
+            duration: 0.35,
+            ease: 'power2.out'
+          });
+        }
+      });
+
+      item.addEventListener('mouseleave', function () {
+        if (!mobile && window.gsap) {
+          window.gsap.to(item, {
+            rotateY: 0,
+            rotateX: 0,
+            duration: 0.5,
+            ease: 'power2.out'
+          });
+        }
       });
     });
   }
